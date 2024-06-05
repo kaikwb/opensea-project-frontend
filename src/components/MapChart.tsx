@@ -6,6 +6,8 @@ import Geoheatmap from 'highcharts/modules/geoheatmap'
 import Accessibility from 'highcharts/modules/accessibility';
 import southAmericaTopoMap from '@highcharts/map-collection/custom/south-america.topo.json';
 import southAmericaGeoJSON from '../assets/south-america.geo.json';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 import * as turf from '@turf/turf';
 
 Accessibility(Highcharts);

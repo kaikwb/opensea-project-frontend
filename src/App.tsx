@@ -16,7 +16,7 @@ function App() {
             username: "user",
             password: "password"
         }).then((data) => {
-            const temp = convertDataForHighcharts(data, "temperature");
+            const temp = convertDataForHighcharts(data, "temperature") as number[][];
 
             const interData = interpolateIntegerPoints(temp);
 

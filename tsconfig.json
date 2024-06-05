@@ -20,7 +20,10 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@turf/turf": ["./node_modules/@turf/turf/dist/js/index.d.ts"]
+    }
   },
   "include": [
     "src"

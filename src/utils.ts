@@ -38,12 +38,6 @@ type FetchAllPagesParameters = {
     password?: string;
 };
 
-interface LatLng {
-    lat: number;
-    lng: number;
-    temp: number;
-}
-
 type WaterData = {
     depth: number;
     id: number;
@@ -56,6 +50,7 @@ type WaterData = {
     salinity?: number;
     silicate?: number;
     temperature?: number;
+    [key: string]: number | undefined;
 };
 
 async function fetchAllWaterDataPages(
@@ -90,44 +85,17 @@ async function fetchAllWaterDataPages(
     return allData;
 }
 
-function convertDataForHighcharts(data: WaterData[], variable: string): number[][] {
+function convertDataForHighcharts(data: WaterData[], variable: string): (number | undefined)[][] {
     return data
         .filter((item) => item[variable] !== null)
         .map((item) => [item.longitude, item.latitude, item[variable]]);
 }
 
-function interpolatePoints(data: number[][], resolution: number): number[][] {
-    const interpolatedData: number[][] = [];
-
-    for (let i = 0; i < data.length - 1; i++) {
-        const start = data[i];
-        const end = data[i + 1];
-
-        const deltaX = (end[0] - start[0]) / resolution;
-        const deltaY = (end[1] - start[1]) / resolution;
-        const deltaZ = (end[2] - start[2]) / resolution;
-
-        for (let j = 0; j < resolution; j++) {
-            interpolatedData.push([start[0] + j * deltaX, start[1] + j * deltaY, start[2] + j * deltaZ]);
-        }
-    }
-
-    return interpolatedData;
-}
-
-function normalizeData(data: number[][]): number[][] {
-    const max = Math.max(...data.map((item) => item[2]));
-    const min = Math.min(...data.map((item) => item[2]));
-
-    return data.map((item) => [item[0], item[1], (item[2] - min) / (max - min)]);
-}
-
-
 function interpolateIntegerPoints(points: number[][]): number[][] {
     let minLat = Infinity, maxLat = -Infinity;
     let minLon = Infinity, maxLon = -Infinity;
 
-    points.forEach(([lon, lat, val]) => {
+    points.forEach(([lon, lat]) => {
         if (lat < minLat) minLat = lat;
         if (lat > maxLat) maxLat = lat;
         if (lon < minLon) minLon = lon;
@@ -136,9 +104,9 @@ function interpolateIntegerPoints(points: number[][]): number[][] {
 
     const interpolate = (lon: number, lat: number): number => {
         const nearestPoints = points.map(point => {
-            const [pLon, pLat, pVal] = point;
+            const [pLon, pLat] = point;
             const distance = Math.sqrt(Math.pow(pLon - lon, 2) + Math.pow(pLat - lat, 2));
-            return { point, distance };
+            return {point, distance};
         }).sort((a, b) => a.distance - b.distance);
 
         const [p1, p2] = nearestPoints;
@@ -162,4 +130,4 @@ function interpolateIntegerPoints(points: number[][]): number[][] {
     return interpolatedPoints;
 }
 
-export {fetchAllWaterDataPages, convertDataForHighcharts, interpolatePoints, normalizeData, interpolateIntegerPoints};
+export {fetchAllWaterDataPages, convertDataForHighcharts, interpolateIntegerPoints};
