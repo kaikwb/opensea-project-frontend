@@ -1,7 +1,7 @@
 import './App.css'
-import MapChart from "./components/MapChart.tsx";
-import {convertDataForHighcharts, fetchAllWaterDataPages} from "./utils.ts";
+import HeatMap from "./components/MapComponent.tsx";
 import {useEffect, useState} from "react";
+import {convertDataForHighcharts, fetchAllWaterDataPages} from "./utils.ts";
 
 function App() {
     const waterDataUrl = "http://localhost:8080/water-data";
@@ -23,13 +23,10 @@ function App() {
     }, []);
 
     return (
-        <>
-            <MapChart
-                dataSeriesMin={-20}
-                dataSeriesMax={40}
-                dataSeriesData={temperatureData}
-            />
-        </>
+        <div style={{width: "50vw"}}>
+            <h1>Heatmap</h1>
+            <HeatMap data={temperatureData}/>
+        </div>
     )
 }
 
