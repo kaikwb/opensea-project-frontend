@@ -4,7 +4,9 @@ import HighchartsReact from 'highcharts-react-official';
 import HighchartsMap from 'highcharts/modules/map';
 import Geoheatmap from 'highcharts/modules/geoheatmap'
 import Accessibility from 'highcharts/modules/accessibility';
-import mapDataWorld from '@highcharts/map-collection/custom/south-america.topo.json';
+import southAmericaTopoMap from '@highcharts/map-collection/custom/south-america.topo.json';
+import southAmericaGeoJSON from '../assets/south-america.geo.json';
+import * as turf from '@turf/turf';
 
 Accessibility(Highcharts);
 HighchartsMap(Highcharts);
@@ -20,6 +22,22 @@ type MapChartProps = {
     dataSeriesData: number[][];
 };
 
+function pointNotInGeoJSON(point: number[], mapPolygon: turf.Feature<turf.MultiPolygon>): boolean {
+    const pointFeature = turf.point([point[0], point[1]]);
+
+    return !turf.booleanPointInPolygon(pointFeature, mapPolygon);
+}
+
+function filterPointsInGeoMap(points: number[][], map: Highcharts.GeoJSON): number[][] {
+    const mapUnion = map.features.reduce((acc, feature) => {
+        return turf.union(acc, feature);
+    });
+
+    return points.filter((point) => {
+        return pointNotInGeoJSON(point, mapUnion);
+    });
+}
+
 function MapChart({
                       title = "",
                       dataSource = "",
@@ -31,7 +49,7 @@ function MapChart({
                   }: MapChartProps) {
     const [options, setOptions] = useState<Highcharts.Options>({
         chart: {
-            map: mapDataWorld,
+            map: southAmericaTopoMap,
             backgroundColor: '#000'
         },
         title: {
@@ -52,19 +70,6 @@ function MapChart({
                 verticalAlign: 'bottom'
             }
         },
-        // mapView: {
-        //     fitToGeometry: {
-        //         type: 'Polygon',
-        //         coordinates: [
-        //             [
-        //                 [-180, 0],
-        //                 [90, 0],
-        //                 [180, 0],
-        //                 [-90, 0]
-        //             ]
-        //         ]
-        //     }
-        // },
         legend: {
             symbolWidth: 350
         },
@@ -120,19 +125,21 @@ function MapChart({
                     enabled: true,
                     blur: 1
                 },
-                data: dataSeriesData,
+                data: [],
                 colorAxis: 0
             },
             {
                 nullColor: '#383838',
                 type: 'mapline',
                 name: 'Outlines of the Continents',
-                data: Highcharts.geojson(mapDataWorld)
+                data: Highcharts.geojson(southAmericaTopoMap)
             }
         ]
     });
 
     useEffect(() => {
+        const filteredData = filterPointsInGeoMap(dataSeriesData, southAmericaGeoJSON);
+
         setOptions(prevOptions => ({
             ...prevOptions,
             series: [
@@ -140,14 +147,14 @@ function MapChart({
                     name: dataSeriesName,
                     type: 'geoheatmap',
                     interpolation: true,
-                    data: dataSeriesData,
+                    data: filteredData,
                     colorAxis: 0
                 },
                 {
                     nullColor: '#383838',
                     type: 'mapline',
                     name: 'Outlines of the Continents',
-                    data: Highcharts.geojson(mapDataWorld)
+                    data: Highcharts.geojson(southAmericaTopoMap)
                 }
             ]
         }));

@@ -1,7 +1,7 @@
 import './App.css'
-import HeatMap from "./components/MapComponent.tsx";
 import {useEffect, useState} from "react";
-import {convertDataForHighcharts, fetchAllWaterDataPages} from "./utils.ts";
+import {convertDataForHighcharts, fetchAllWaterDataPages, interpolateIntegerPoints} from "./utils.ts";
+import MapChart from "./components/MapChart.tsx";
 
 function App() {
     const waterDataUrl = "http://localhost:8080/water-data";
@@ -18,14 +18,22 @@ function App() {
         }).then((data) => {
             const temp = convertDataForHighcharts(data, "temperature");
 
-            setTemperatureData(temp);
+            const interData = interpolateIntegerPoints(temp);
+
+            setTemperatureData(interData);
         });
     }, []);
 
     return (
         <div style={{width: "50vw"}}>
-            <h1>Heatmap</h1>
-            <HeatMap data={temperatureData}/>
+            <MapChart
+                title={'Temperature Heatmap'}
+                dataSource={'World Ocean Database IODE'}
+                dataSourceUrl={'http://wod.iode.org/'}
+                dataSeriesMin={-20}
+                dataSeriesMax={40}
+                dataSeriesData={temperatureData}
+            />
         </div>
     )
 }
