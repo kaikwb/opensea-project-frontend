@@ -4,17 +4,18 @@ import {convertDataForHighcharts, fetchAllWaterDataPages, interpolateIntegerPoin
 import MapChart from "./components/MapChart.tsx";
 
 function App() {
-    const waterDataUrl = "http://localhost:8080/water-data";
     const [temperatureData, setTemperatureData] = useState<number[][]>([]);
 
     useEffect(() => {
+        const waterDataUrl = `${import.meta.env.VITE_API_URL}/water-data`;
+
         fetchAllWaterDataPages({
             apiUrl: waterDataUrl,
             year: 2022,
             depth: 0,
             pageSize: 10000,
-            username: "user",
-            password: "password"
+            username: import.meta.env.VITE_API_USERNAME,
+            password: import.meta.env.VITE_API_PASSWORD
         }).then((data) => {
             const temp = convertDataForHighcharts(data, "temperature") as number[][];
 
