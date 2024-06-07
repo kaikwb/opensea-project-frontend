@@ -49,22 +49,24 @@ function MapChart({
                       dataSeriesMax,
                       dataSeriesData
                   }: MapChartProps) {
+    const chartFontColor = '#000';
+
     const [options, setOptions] = useState<Highcharts.Options>({
         chart: {
             map: southAmericaTopoMap,
-            backgroundColor: '#000',
+            backgroundColor: 'rgba(255,255,255,0)',
             borderRadius: 10
         },
         title: {
             text: title,
             style: {
-                color: '#fff'
+                color: chartFontColor
             }
         },
         subtitle: {
-            text: `Fonte: <a style="color: #ddd" href="${dataSourceUrl}">${dataSource}</a>`,
+            text: `Fonte: <a style="color: #000" href="${dataSourceUrl}">${dataSource}</a>`,
             style: {
-                color: '#fff'
+                color: chartFontColor
             }
         },
         mapNavigation: {
@@ -85,13 +87,13 @@ function MapChart({
             }
         },
         colorAxis: {
-            gridLineColor: '#000',
+            gridLineColor: chartFontColor,
             min: dataSeriesMin,
             max: dataSeriesMax,
             labels: {
                 format: '{value}',
                 style: {
-                    color: '#fff'
+                    color: chartFontColor
                 }
             },
             stops: [
@@ -148,7 +150,7 @@ function MapChart({
             title: {
                 text: title,
                 style: {
-                    color: '#fff'
+                    color: chartFontColor
                 }
             },
             colorAxis: {
@@ -158,7 +160,7 @@ function MapChart({
                 labels: {
                     format: '{value}',
                     style: {
-                        color: '#fff'
+                        color: chartFontColor
                     }
                 },
                 stops: [

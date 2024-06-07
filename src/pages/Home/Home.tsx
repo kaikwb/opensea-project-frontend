@@ -25,32 +25,32 @@ const chartArgs: ChartArgs = {
     temperature: {
         title: "Temperatura da água em °C",
         dataSeriesName: "Temperatura",
-        dataSeriesMin: -20,
+        dataSeriesMin: 5,
         dataSeriesMax: 40
     },
     salinity: {
         title: "Salinidade da água em PSU",
         dataSeriesName: "Salinidade",
-        dataSeriesMin: 0,
+        dataSeriesMin: 30,
         dataSeriesMax: 40
     },
     oxygen: {
-        title: "Oxigenação da água em mg/L",
+        title: "Oxigenação da água em µmol/kg",
         dataSeriesName: "Oxigenação",
         dataSeriesMin: 0,
-        dataSeriesMax: 20
+        dataSeriesMax: 400
     },
     phosphate: {
-        title: "Fosfato da água em mg/L",
+        title: "Fosfato da água em µmol/kg",
         dataSeriesName: "Fosfato",
         dataSeriesMin: 0,
-        dataSeriesMax: 1
+        dataSeriesMax: 2
     },
     silicate: {
-        title: "Silicato da água em mg/L",
+        title: "Silicato da água em µmol/kg",
         dataSeriesName: "Silicato",
         dataSeriesMin: 0,
-        dataSeriesMax: 1
+        dataSeriesMax: 20
     },
     ph: {
         title: "pH da água",
@@ -190,7 +190,6 @@ function Home() {
                     <Box
                         sx={{
                             flex: '1 1 85%',
-                            backgroundColor: '#f0f0f0',
                             mb: 2
                         }}
                     >
@@ -206,7 +205,6 @@ function Home() {
                     <Box
                         sx={{
                             flex: '1 1 15%',
-                            backgroundColor: '#ccc',
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'flex-end',
@@ -228,7 +226,6 @@ function Home() {
                 <Box
                     sx={{
                         flex: '1 1 25%',
-                        backgroundColor: '#ddd',
                         p: 2
                     }}
                 >
