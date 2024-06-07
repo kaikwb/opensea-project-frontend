@@ -52,7 +52,8 @@ function MapChart({
     const [options, setOptions] = useState<Highcharts.Options>({
         chart: {
             map: southAmericaTopoMap,
-            backgroundColor: '#000'
+            backgroundColor: '#000',
+            borderRadius: 10
         },
         title: {
             text: title,
@@ -189,13 +190,12 @@ function MapChart({
     }, [dataSeriesData]);
 
     return (
-        <div>
-            <HighchartsReact
-                highcharts={Highcharts}
-                constructorType={'mapChart'}
-                options={options}
-            />
-        </div>
+        <HighchartsReact
+            highcharts={Highcharts}
+            constructorType={'mapChart'}
+            containerProps={{style: {height: '100%', width: '100%'}}}
+            options={options}
+        />
     );
 }
 
