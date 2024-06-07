@@ -1,6 +1,7 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Slider} from "@mui/material";
 import PagePaper from "../../components/PagePaper/PagePaper.tsx";
+import MapChart from "../../components/MapChart.tsx";
 
 const sliderMarks = [
     {
@@ -61,6 +62,7 @@ function Home() {
     const [data, setData] = useState('temperature');
     const [depth, setDepth] = useState('0');
     const [year, setYear] = useState(2023);
+    const [dataPoints, setDataPoints] = useState<number[][]>([]);
 
     const handleDataChange = (event: SelectChangeEvent) => {
         setData(event.target.value);
@@ -73,6 +75,42 @@ function Home() {
     const handleYearChange = (_event: Event, newYear: number | number[]) => {
         setYear(newYear as number);
     };
+
+    useEffect(() => {
+        const worker = new Worker(new URL('../../dataWorker.ts', import.meta.url), {type: 'module'});
+
+        const apiUrl = `${import.meta.env.VITE_API_URL}/water-data`;
+        const apiUsername = import.meta.env.VITE_API_USERNAME;
+        const apiPassword = import.meta.env.VITE_API_PASSWORD;
+
+        worker.postMessage({
+            apiUrl: apiUrl,
+            year: year,
+            depth: parseInt(depth),
+            pageSize: 10000,
+            username: apiUsername,
+            password: apiPassword,
+            dataVariable: data,
+        });
+
+        worker.onmessage = (event: MessageEvent<number[][]>) => {
+            setDataPoints(event.data);
+            worker.terminate();
+        };
+
+        worker.onerror = (error) => {
+            console.error("Worker error:", error);
+            worker.terminate();
+        };
+
+        return () => {
+            worker.terminate();
+        };
+    }, [data, depth, year]);
+
+    useEffect(() => {
+        console.log(dataPoints);
+    }, [dataPoints]);
 
     return (
         <PagePaper>
@@ -99,6 +137,7 @@ function Home() {
                             mb: 2
                         }}
                     >
+                        <MapChart dataSeriesMin={-20} dataSeriesMax={40} dataSeriesData={dataPoints}/>
                     </Box>
                     <Box
                         sx={{
@@ -113,7 +152,7 @@ function Home() {
                         }}
                     >
                         <Slider
-                            defaultValue={year}
+                            value={year}
                             valueLabelDisplay={"on"}
                             marks={sliderMarks}
                             min={1966}

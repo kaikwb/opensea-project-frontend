@@ -9,7 +9,6 @@ interface BodyProps {
 function Body({children, backgroundImage}: BodyProps) {
     return (
         <Box
-            component="body"
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
