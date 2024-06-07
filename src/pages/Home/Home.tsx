@@ -3,6 +3,63 @@ import {Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Slide
 import PagePaper from "../../components/PagePaper/PagePaper.tsx";
 import MapChart from "../../components/MapChart.tsx";
 
+interface ChartData {
+    title: string;
+    dataSeriesName: string;
+    dataSeriesMin: number;
+    dataSeriesMax: number;
+}
+
+interface ChartArgs {
+    temperature: ChartData;
+    salinity: ChartData;
+    oxygen: ChartData;
+    phosphate: ChartData;
+    silicate: ChartData;
+    ph: ChartData;
+
+    [key: string]: ChartData;
+}
+
+const chartArgs: ChartArgs = {
+    temperature: {
+        title: "Temperatura da água em °C",
+        dataSeriesName: "Temperatura",
+        dataSeriesMin: -20,
+        dataSeriesMax: 40
+    },
+    salinity: {
+        title: "Salinidade da água em PSU",
+        dataSeriesName: "Salinidade",
+        dataSeriesMin: 0,
+        dataSeriesMax: 40
+    },
+    oxygen: {
+        title: "Oxigenação da água em mg/L",
+        dataSeriesName: "Oxigenação",
+        dataSeriesMin: 0,
+        dataSeriesMax: 20
+    },
+    phosphate: {
+        title: "Fosfato da água em mg/L",
+        dataSeriesName: "Fosfato",
+        dataSeriesMin: 0,
+        dataSeriesMax: 1
+    },
+    silicate: {
+        title: "Silicato da água em mg/L",
+        dataSeriesName: "Silicato",
+        dataSeriesMin: 0,
+        dataSeriesMax: 1
+    },
+    ph: {
+        title: "pH da água",
+        dataSeriesName: "pH",
+        dataSeriesMin: 0,
+        dataSeriesMax: 14
+    }
+};
+
 const sliderMarks = [
     {
         value: 1966,
@@ -137,7 +194,14 @@ function Home() {
                             mb: 2
                         }}
                     >
-                        <MapChart dataSeriesMin={-20} dataSeriesMax={40} dataSeriesData={dataPoints}/>
+                        <MapChart
+                            title={chartArgs[data].title}
+                            dataSource="World Ocean Database"
+                            dataSourceUrl="https://www.ncei.noaa.gov/products/world-ocean-database"
+                            dataSeriesMin={chartArgs[data].dataSeriesMin}
+                            dataSeriesMax={chartArgs[data].dataSeriesMax}
+                            dataSeriesData={dataPoints}
+                        />
                     </Box>
                     <Box
                         sx={{

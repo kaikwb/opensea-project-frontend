@@ -144,6 +144,32 @@ function MapChart({
 
         setOptions(prevOptions => ({
             ...prevOptions,
+            title: {
+                text: title,
+                style: {
+                    color: '#fff'
+                }
+            },
+            colorAxis: {
+                gridLineColor: '#000',
+                min: dataSeriesMin,
+                max: dataSeriesMax,
+                labels: {
+                    format: '{value}',
+                    style: {
+                        color: '#fff'
+                    }
+                },
+                stops: [
+                    [0, '#9589d3'],
+                    [0.16, '#7cc4be'],
+                    [0.33, '#5d8bbe'],
+                    [0.5, '#688f2c'],
+                    [0.66, '#dbac0b'],
+                    [0.83, '#e75e14'],
+                    [1, '#852809']
+                ]
+            },
             series: [
                 {
                     name: dataSeriesName,
@@ -160,7 +186,7 @@ function MapChart({
                 }
             ]
         }));
-    }, [dataSeriesData, dataSeriesName]);
+    }, [dataSeriesData]);
 
     return (
         <div>
