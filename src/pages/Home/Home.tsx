@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Slider} from "@mui/material";
+import {Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Slider, Typography} from "@mui/material";
 import PagePaper from "../../components/PagePaper/PagePaper.tsx";
 import MapChart from "../../components/MapChart.tsx";
 
@@ -59,6 +59,49 @@ const chartArgs: ChartArgs = {
         dataSeriesMax: 14
     }
 };
+
+interface DataInformation {
+    title: string;
+    description: string;
+}
+
+interface DataInformationArgs {
+    temperature: DataInformation;
+    salinity: DataInformation;
+    oxygen: DataInformation;
+    phosphate: DataInformation;
+    silicate: DataInformation;
+    ph: DataInformation;
+
+    [key: string]: DataInformation;
+}
+
+const dataInformationArgs: DataInformationArgs = {
+    temperature: {
+        title: "Temperatura",
+        description: "A temperatura da água do mar afeta diretamente a fisiologia dos organismos marinhos, a distribuição das espécies e os padrões de migração. Alterações significativas na temperatura, como o aquecimento global, podem levar ao branqueamento dos corais, uma vez que eles expulsam as algas simbióticas necessárias para sua sobrevivência. Espécies sensíveis ao calor podem sofrer estresse térmico, o que resulta em declínios populacionais ou mudanças de habitat. Além disso, a temperatura da água influencia a solubilidade do oxigênio, com águas mais quentes retendo menos oxigênio, exacerbando problemas de oxigenação."
+    },
+    salinity: {
+        title: "Salinidade",
+        description: "A salinidade é crucial para a osmose e a regulação dos fluidos nos organismos marinhos. Mudanças na salinidade, causadas por eventos como derretimento de gelo, chuvas intensas ou poluição, podem estressar os organismos, afetando sua capacidade de regular os fluidos corporais. Reduções na salinidade podem afetar espécies de águas salgadas, enquanto aumentos podem impactar organismos de estuários e manguezais. Alterações extremas podem levar à perda de biodiversidade e à degradação dos ecossistemas costeiros."
+    },
+    oxygen: {
+        title: "Oxigenação",
+        description: "O oxigênio dissolvido é vital para a respiração dos organismos aquáticos. Níveis baixos de oxigênio (hipóxia) podem resultar em zonas mortas, áreas onde a vida marinha é severamente limitada ou inexistente. Isso pode ocorrer devido à eutrofização, onde o excesso de nutrientes promove o crescimento de algas que, ao morrer, consomem oxigênio durante a decomposição. A hipóxia pode causar a morte em massa de peixes e outros organismos marinhos, afetando cadeias alimentares inteiras e a saúde dos ecossistemas."
+    },
+    phosphate: {
+        title: "Fosfato",
+        description: "O fosfato é um nutriente essencial, mas em concentrações excessivas pode levar à eutrofização. O aumento de fosfatos, geralmente proveniente de escoamento agrícola e efluentes industriais, promove o crescimento excessivo de algas (florescimento algal). Quando essas algas morrem e se decompõem, consomem grandes quantidades de oxigênio, resultando em hipóxia. Esse processo pode destruir habitats marinhos, reduzir a biodiversidade e criar zonas mortas."
+    },
+    silicate: {
+        title: "Silicato",
+        description: "Os silicatos são necessários para a construção dos esqueletos de organismos como diatomáceas. Alterações nos níveis de silicato podem afetar a produtividade primária dos oceanos, especialmente o crescimento das diatomáceas, que são uma base fundamental da cadeia alimentar marinha. A redução dos silicatos pode limitar o crescimento desses organismos, impactando negativamente a disponibilidade de alimento para espécies superiores, incluindo pequenos peixes e crustáceos."
+    },
+    ph: {
+        title: "pH",
+        description: "O pH dos oceanos afeta a solubilidade de minerais como carbonato de cálcio, essencial para a formação de conchas e esqueletos de corais, moluscos e outros organismos marinhos. A acidificação dos oceanos, resultante da absorção de CO₂ atmosférico, reduz o pH e pode levar à descalcificação desses organismos. Isso enfraquece suas estruturas, compromete a saúde dos recifes de corais e altera a dinâmica dos ecossistemas marinhos. A acidificação também pode impactar negativamente a fisiologia e o comportamento de várias espécies marinhas."
+    }
+}
 
 const sliderMarks = [
     {
@@ -279,6 +322,19 @@ function Home() {
                             <MenuItem value={100}>100</MenuItem>
                         </Select>
                     </FormControl>
+
+                    <Typography
+                        variant="h6"
+                        sx={{my: 2, textAlign: 'center'}}
+                    >
+                        {dataInformationArgs[data].title}
+                    </Typography>
+                    <Typography
+                        variant="body1"
+                        sx={{textAlign: 'justify'}}
+                    >
+                        {dataInformationArgs[data].description}
+                    </Typography>
                 </Box>
             </Box>
         </PagePaper>
